@@ -1,0 +1,4 @@
+colormath
+easyocr
+loguru
+# end of file

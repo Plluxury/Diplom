@@ -1,0 +1,112 @@
+* {
+  margin: 0;
+  padding: 0;
+
+}
+.header {
+    height: 120px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #a44fff;
+}
+.bg{
+    height: 800px;
+    background-color: #f4d9d4;
+    background-size: cover; /* этот параметр масштабирует изображение так, чтобы оно полностью покрывало задний план */
+    background-position: center; /* центрирует изображение по горизонтали и вертикали */
+}
+.logo {
+    padding: 1%;
+}
+
+.menu {
+    padding: 1%;
+    display: flex;
+}
+.menu a{
+    padding-left: 35px;
+    text-decoration: none;
+    font-family: "Lucinda Grande", "Lucinda Sans Unicode", Helvetica, Arial, Verdana, sans-serif;
+    font-size: 20px;
+    color: #e1e1e1;
+}
+.filters input[type="checkbox"] {
+    cursor: pointer;
+}
+.filters label{
+    padding: 0 10px 0 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+.filters label:hover{
+    color: #a34efd;
+}
+button[type="submit"], button[type="button"] {
+    background-color: #a34efd; /* Зеленый цвет */
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover, button[type="button"]:hover {
+    background-color: #7b12cc; /* Темно-зеленый цвет при наведении */
+}
+.prokrutka {
+    max-height: 600px; /* Максимальная высота блока */
+    background: #f4d9d4; /* цвет фона, белый */
+    border: 1px solid #C1C1C1; /* размер и цвет границы блока */
+    overflow-y: scroll; /* прокрутка по вертикали */
+    border-top: none; /* Убираем верхнюю границу */
+    border-bottom: none; /* Убираем нижнюю границу */
+}
+.in-message {
+    width: fit-content;
+    padding: 5px;
+    font-family: "Lucinda Grande", "Lucinda Sans Unicode", Helvetica, Arial, Verdana, sans-serif;
+    border: 3px solid #9200ff;
+    margin: 5px;
+}
+.my-message {
+    width: fit-content;
+    padding: 5px;
+    font-family: "Lucinda Grande", "Lucinda Sans Unicode", Helvetica, Arial, Verdana, sans-serif;
+    border: 3px solid orange;
+    margin: 5px;
+}
+.in-message p{
+    padding: 3px;
+}
+.my-message p{
+    padding: 3px;
+}
+
+.footer{
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 120px;
+    background-color: #a44fff;
+}
+.footer-logo img{
+    padding: 30px;
+}
+.links img{
+    width: 50px;
+    height: 50px;
+    padding: 25px
+}
+.links a {
+    text-decoration: none;
+}

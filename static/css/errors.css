@@ -1,0 +1,12 @@
+.success{
+    width: 98.75%;
+    border: 2px solid green;
+    padding: 10px;
+    background-color: #7ace7a;
+}
+.error{
+    width: 98.75%;
+    border: 2px solid red;
+    padding: 10px;
+    background-color: #fbb5b5;
+}

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/reg.css') }}">
+     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/errors.css') }}">
+</head>
+<body>
+<div class="header">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="">
+        </div>
+        <div class="menu">
+            {% for m in menu %}
+            {%if m.title == 'Войти' and user.is_authenticated%}
+                <a href="{{ url_for('profile') }}">Личный профиль</a>
+            {%else%}
+                <a href="{{m.url}}">{{m.title}}</a>
+            {%endif%}
+            {% endfor %}
+        </div>
+    </div>
+{% for cat, msg in get_flashed_messages(True) %}
+<div class="flash {{cat}}">{{msg}}</div>
+{% endfor %}
+<div class="bg">
+<div class="images_form">
+        <div class="tg_image">
+            <img src="{{ url_for('static', filename='images/tg_image.png') }}" style="height: 250px; width: 250px" alt="">
+        </div>
+        <form action="/register" method="post">
+            <p><label>Фамилия:</label> <input type="text" name="surname" value="" required/>
+            <p><label>Имя:</label> <input type="text" name="name" value="" required/>
+            <p><label>Email:</label> <input type="text" name="email" value="" required/>
+            <p><label>Пароль:</label> <input type="password" name="psw" value="" required/>
+            <p><label>Повторите пароль:</label> <input type="password" name="psw2" value="" required/>
+            <p><input type="submit" value="Регистрация">
+        </form>
+        <div class="w_image">
+            <img src="{{ url_for('static', filename='images/w_image.png') }}" alt="">
+        </div>
+</div>
+<div class="footer">
+        <div class="footer-logo">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="">
+        </div>
+        <div class="links">
+            <a href="">
+                <img src="{{ url_for('static', filename='images/vk.png') }}" alt="" style="">
+            </a>
+            <a href="">
+                <img src="{{ url_for('static', filename='images/tg.png') }}" alt="" style="width: 50px; height: 50px">
+            </a>
+            <a href="">
+                <img src="{{ url_for('static', filename='images/github.png') }}" alt="" style="width: 50px; height: 50px">
+            </a>
+        </div>
+
+    </div>
+    </div>
+</body>
+</html>
