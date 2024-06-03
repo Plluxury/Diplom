@@ -2,14 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Личный кабинет</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/tg.png') }}" />
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/user.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/errors.css') }}">
 </head>
 <body>
     <div class="header">
-        <div class="logo">
-            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="">
+         <div class="logo">
+            <h1>MessageChecker</h1>
         </div>
         <div class="menu">
             {% for m in menu %}
@@ -59,10 +60,13 @@
     </form>
         <a href="{{ url_for('profile')}}"><button type="reset">Сбросить фильтр</button></a>
     </div>
+{% if nouses %}
+    <div style="padding-left: 400px; padding-top: 200px;
+                font-size: 30px">
+        {{nouses}}
+    </div>
+{% else %}
 <div class="uses">
-    {% if not uses[0][1] %}
-        {{uses}}
-    {% else %}
         {% for u in uses %}
             <div class="rows">
                 <p style="padding-left: 50px">{{ u[0] }}</p>
@@ -79,13 +83,14 @@
         <a class="paga" href="{{ url_for('profile', page=page+1, start=start_date, end=end_date) }}">Следующая</a>
     {% endif %}
     </div>
-    {% endif %}
+
 </div>
+{% endif %}
         </div>
 </div>
     <div class="footer">
         <div class="footer-logo">
-            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="">
+            <h1>MessageChecker</h1>
         </div>
         <div class="links">
             <a href="">

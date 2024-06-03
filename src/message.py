@@ -108,41 +108,31 @@ class Message(object):
     def detect_message_text(self, reader):
         """
         Detect text in the cropped boxes.
-
         Parameters
             reader : Type[easyocr.Reader]
                 EasyOCR reader instance.
         """
         result = reader.readtext(self.cropped_image)
-
         if not result:
             return
-
         if self.color_theme is None:
             self.color_theme = determine_color_theme(result[0][0], self.cropped_image)
-
         message_color = determine_message_color(result[len(result) - 1][0],
                                                 result[len(result) - 1][1],
                                                 self.color_theme,
                                                 self.cropped_image)
-
         for i, (coords, text, _) in enumerate(result[:-1]):
             bbox = [coords[0][0], coords[0][1],
                     coords[2][0], coords[2][1]]
-
             x_min, y_min, x_max, y_max = map(int, bbox)
             cropped_text = self.cropped_image[y_min:y_max, x_min:x_max]
-
             if message_color is not None:
                 bg_mean_color, text_mean_color = threshold(cropped_text, self.color_theme)
-
                 bg_delta_e = delta_e_cie1976(message_color, bg_mean_color)
                 txt_delta_e = delta_e_cie1976((255, 255, 255),
                                               text_mean_color) if self.color_theme == ScreenshotColor.DARK \
                     else delta_e_cie1976((0, 0, 0), text_mean_color)
-
                 self.process_text(text, bg_delta_e, txt_delta_e)
-
         text = result[-1][1]
         if len(text) > 0:
             time_match = self.TIME_PATTERN.search(text)

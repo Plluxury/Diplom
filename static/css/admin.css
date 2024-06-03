@@ -13,7 +13,10 @@
 }
 
 .logo {
+    width: 40%;
     padding: 1%;
+    color: #e1e1e1;
+    font-family: "Lucinda Grande", "Lucinda Sans Unicode", Helvetica, Arial, Verdana, sans-serif;
 }
 
 .menu {
@@ -268,6 +271,9 @@ button[type="reset"]:hover{
 	margin: 0;
 	transition: background-color 0.2s;
 }
+.input-db-btn[title]::after {
+            font-size: 40px; /* Указываем желаемый размер шрифта */
+        }
 .input-img-btn {
 	position: relative;
     margin-left: 10px;
@@ -354,7 +360,11 @@ button[type="reset"]:hover{
     height: 120px;
     background-color: #a44fff;
 }
-.footer-logo img{
+.footer-logo{
+    display: flex;
+    text-align: right;
+    color: #e1e1e1;
+    font-family: "Lucinda Grande", "Lucinda Sans Unicode", Helvetica, Arial, Verdana, sans-serif;
     padding: 30px;
 }
 .links img{

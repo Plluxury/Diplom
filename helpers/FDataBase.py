@@ -23,7 +23,6 @@ class FDataBase:
             self.__cur.execute(f"SELECT COUNT() as `count` FROM users WHERE email LIKE '{email}'")
             res = self.__cur.fetchone()
             if res['count'] > 0:
-                print('Пользователь существует')
                 return False
             self.__cur.execute("INSERT INTO users(id_user, user_surname, user_name, email, password) "
                                "VALUES(NULL, ?,?,?,?)", (surname, name, email, hashpsw))
@@ -143,7 +142,6 @@ class FDataBase:
                                f"INNER JOIN images i ON u.id_image = i.id_image "
                                f"INNER JOIN files f ON u.id_file = f.id_file WHERE u.id_user = ?", user_id)
             res = self.__cur.fetchall()
-            print(res)
             if not res:
                 res = "Вы еще не использовали модель"
                 return res
@@ -163,6 +161,7 @@ class FDataBase:
 
             if not res:
                 res = "Модель еще не была использована"
+                print(11111111111111111111111, res)
                 return res
             return res
         except sqlite3.Error as e:
@@ -179,3 +178,5 @@ class FDataBase:
         except sqlite3.Error as e:
             print("Ошибка " + str(e))
         return False
+
+

@@ -29,35 +29,9 @@ CKPT_DICT = {'telegram': os.path.join(app_root, 'src/best_ckpt_tg.pth'),
              'whatsapp': os.path.join(app_root, 'src/best_ckpt_whatsapp.pth')}
 
 
-# def make_parser() -> argparse.ArgumentParser:
-#     """
-#     Create an argument parser.
-#
-#     Returns
-#         argparse.ArgumentParser :
-#             The argument parser.
-#     """
-#     parser = argparse.ArgumentParser("YOLOX Demo!")
-#     parser.add_argument(
-#         "--path", required=True, help="path to images"
-#     )
-#     parser.add_argument(
-#         "--messenger", required=True, type=str, help="choose messenger model"
-#     )
-#     parser.add_argument(
-#         "--conf", default=0.7, type=float, help="test conf"
-#     )
-#     parser.add_argument(
-#         "--nms", default=0.45, type=float, help="test nms threshold"
-#     )
-#
-#     return parser
-
-
 def create_json(predictor: Predictor, path: str, directory_path: str):
     """
     Create JSON files from image predictions.
-
     Parameters
         predictor : Type[Predictor]
             An instance of the Predictor class.
@@ -66,32 +40,25 @@ def create_json(predictor: Predictor, path: str, directory_path: str):
         directory_path : str
             Directory path to save JSON files.
     """
-
     if os.path.isdir(path):
         files = get_image_list(path)
     else:
         files = [path]
     files.sort()
-
     reader = easyocr.Reader(['ru', 'en'])
     data = {'channel name': '', 'messages': []}
-
     results_dir = os.path.join('results', directory_path)
     os.makedirs(results_dir)
-
     for image_name in files:
         outputs, img_info = predictor.inference(image_name)
         save_path = os.path.join(results_dir, f'{os.path.splitext(os.path.split(image_name)[1])[0]}.json')
-        print(save_path)
         image = cv2.imread(image_name)
         result = get_bboxes(outputs[0], img_info)
-
         if len(result[0]) == 0:
             data = {'info': 'Скриншот не содержит сообщений'}
             with open(save_path, "w") as json_file:
                 json.dump(data, json_file, ensure_ascii=False, indent=2)
             continue
-
         classes, bboxes = result[0], result[1]
         logger.info(image_name)
         color_theme = None
@@ -108,7 +75,6 @@ def create_json(predictor: Predictor, path: str, directory_path: str):
                 message = Message(cropped_image, color_theme, class_name)
                 message.detect_message_text(reader)
                 data['messages'].append(message)
-
         with open(save_path, "w") as json_file:
             json.dump(data, json_file, cls=MessageEncoder, ensure_ascii=False, indent=2)
 
@@ -118,10 +84,10 @@ def run_inf(path, messenger):
     Main function to run the YOLOX demo.
 
     Parameters
-        exp :
-            YOLOX experiment configuration.
-        args :
-            Command line arguments.
+        path :
+            path to image
+        messenger :
+            chosen ml model telegram or whatsapp
     """
 
     exp = get_exp(EXP_FILE)

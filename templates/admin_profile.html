@@ -2,14 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Личный кабинет</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/tg.png') }}" />
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/admin.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/errors.css') }}">
 </head>
 <body>
     <div class="header">
-        <div class="logo">
-            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="">
+         <div class="logo">
+            <h1>MessageChecker</h1>
         </div>
         <div class="menu">
             {% for m in menu %}
@@ -74,10 +75,10 @@
     {% else %}
         {% for u in uses %}
             <div class="rows">
-                <p style="padding-left: 50px">{{ u[0] }}</p>
-                <a class="image_d" href="{{ url_for('download_image', filename=u[1]) }}">{{ u[1] }}</a>
-                <a class="image_f" href="{{ url_for('download_file', date_time=u[0], filename=u[2]) }}">{{ u[2] }}</a>
                 <p style="padding-left: 50px">{{ u[3] }}</p>
+                <p style="padding-left: 50px">{{ u[0] }}</p>
+                 <a class="image_f" href="{{ url_for('download_file', date_time=u[0], filename=u[2]) }}">{{ u[2] }}</a>
+                <a class="image_d" href="{{ url_for('download_image', filename=u[1]) }}">{{ u[1] }}</a>
             </div>
         {% endfor %}
     <div class="pagination">
@@ -91,28 +92,30 @@
     </div>
     {% endif %}
 </div>
-<form action="" method="get" enctype="multipart/form-data">
+<form action="{{ url_for('check_json') }}" method="post" enctype="multipart/form-data">
     <label class="input-e input-db">
         <input type="file" name="db">
-        <span class="input-db-btn">Выберите базу данных</span>
+        <span title="База должна иметь вид {'1': password, ..., n: password_n} " class="input-db-btn">Выберите базу паролей</span>
         <span class="input-e-text">База не выбрана</span>
     </label>
     <label class="input-e input-img" style="margin-left: 20px;">
         <input type="file" name="img">
-        <span class="input-img-btn">Выберите фотографию</span>
-        <span class="input-e-text">Фотография не выбрана</span>
+        <span class="input-img-btn">Выберите json-расшифровку</span>
+        <span class="input-e-text">Json файл не выбран</span>
     </label>
-    <button class='db-sub' type="submit">Проверить фотографию</button>
-</form>
+    <button class='db-sub'  type="submit">Проверить фотографию</button>
 
+</form>
+<div style="margin-left: 100px; margin-top: 30px;  font-family: 'Lucinda Grande', 'Lucinda Sans Unicode', Helvetica, Arial, Verdana, sans-serif; font-size: 16px; ">
+    {% if detected %}
+        <p>{{detected}}</p>
+    {%endif%}
+</div>
 </div>
     </div>
-
-
-
 <div class="footer">
         <div class="footer-logo">
-            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="">
+            <h1>MessageChecker</h1>
         </div>
         <div class="links">
             <a href="">

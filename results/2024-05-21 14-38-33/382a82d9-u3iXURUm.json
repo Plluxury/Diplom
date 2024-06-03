@@ -1,0 +1,149 @@
+{
+  "channel name": "Анастасия",
+  "messages": [
+    {
+      "owner": null,
+      "quote_owner": null,
+      "quote": null,
+      "text": null,
+      "time": "14.14",
+      "changed": false,
+      "type": "Исходящие"
+    },
+    {
+      "owner": null,
+      "quote_owner": null,
+      "quote": null,
+      "text": "a зачем вам нужна?",
+      "time": "14-17",
+      "changed": false,
+      "type": "Входящие"
+    },
+    {
+      "owner": null,
+      "quote_owner": null,
+      "quote": null,
+      "text": "Да я про политех хотел спросить",
+      "time": "14.18",
+      "changed": false,
+      "type": "Исходящие"
+    },
+    {
+      "owner": null,
+      "quote_owner": null,
+      "quote": null,
+      "text": "спрашивай",
+      "time": "14-18",
+      "changed": false,
+      "type": "Входящие"
+    },
+    {
+      "owner": null,
+      "quote_owner": null,
+      "quote": null,
+      "text": "Что после колледжа надо сдавать?",
+      "time": "14.18",
+      "changed": false,
+      "type": "Исходящие"
+    },
+    {
+      "owner": null,
+      "quote_owner": null,
+      "quote": null,
+      "text": "Тяжело нетяжело",
+      "time": "14.18",
+      "changed": true,
+      "type": "Исходящие"
+    },
+    {
+      "owner": null,
+      "quote_owner": "Pluxury",
+      "quote": "Что после колледжа надо сдавать?",
+      "text": "математику проф, информатику русский",
+      "time": "14-19",
+      "changed": false,
+      "type": "Входящие"
+    },
+    {
+      "owner": null,
+      "quote_owner": "Pluxury",
+      "quote": "Тяжело нетяжело",
+      "text": "задания примерно как егэ",
+      "time": "74.19",
+      "changed": false,
+      "type": "Входящие"
+    },
+    {
+      "owner": null,
+      "quote_owner": "Анастасия",
+      "quote": "математику проф; информатику; русский",
+      "text": "факультет это какой",
+      "time": "14.19",
+      "changed": false,
+      "type": "Исходящие"
+    },
+    {
+      "owner": null,
+      "quote_owner": null,
+      "quote": null,
+      "text": "ирит",
+      "time": "74.19",
+      "changed": false,
+      "type": "Входящие"
+    },
+    {
+      "owner": null,
+      "quote_owner": null,
+      "quote": null,
+      "text": "Тоже програмиоованием?",
+      "time": "14.19",
+      "changed": false,
+      "type": "Исходящие"
+    },
+    {
+      "owner": null,
+      "quote_owner": null,
+      "quote": null,
+      "text": "да",
+      "time": "14.21",
+      "changed": false,
+      "type": "Входящие"
+    },
+    {
+      "owner": null,
+      "quote_owner": null,
+      "quote": null,
+      "text": "А там какие языки",
+      "time": "14.22",
+      "changed": false,
+      "type": "Исходящие"
+    },
+    {
+      "owner": null,
+      "quote_owner": null,
+      "quote": null,
+      "text": "Стоит не стоит туда вообще пытаться попасть?",
+      "time": "14.22",
+      "changed": false,
+      "type": "Исходящие"
+    },
+    {
+      "owner": null,
+      "quote_owner": null,
+      "quote": null,
+      "text": "у меня инфокоммуникационные системы и технологии; нам давали и php; python js и angular базы данных; сети и всякое такое",
+      "time": "14.24",
+      "changed": false,
+      "type": "Входящие"
+    },
+    {
+      "owner": null,
+      "quote_owner": null,
+      "quote": null,
+      "text": "достаточно интересно",
+      "time": "74.2",
+      "changed": false,
+      "type": "Входящие"
+    }
+  ]
+}

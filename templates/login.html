@@ -2,13 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <title>Вход</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/tg.png') }}" />
      <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/login.css') }}">
      <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/errors.css') }}">
 </head>
 <body>
 <div class="header">
-        <div class="logo">
-            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="">
+         <div class="logo">
+            <h1>MessageChecker</h1>
         </div>
         <div class="menu">
             {% for m in menu %}
@@ -30,7 +32,7 @@
         </div>
         <form action="" method="post">
             <p><label>Email:</label> <input type="text" name="email" value="" required/>
-            <p><label>Пароль:</label> <input type="text" name="psw" value="" required/>
+            <p><label>Пароль:</label> <input type="password" name="psw" value="" required/>
             <p> <input type="checkbox" name="remainme"/> Запомнить меня
             <p><input type="submit" value="Войти">
             <p class="register"><a href="{{url_for('register')}}">Регистрация</a>
@@ -41,7 +43,7 @@
 </div>
 <div class="footer">
         <div class="footer-logo">
-            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="">
+            <h1>MessageChecker</h1>
         </div>
         <div class="links">
             <a href="">

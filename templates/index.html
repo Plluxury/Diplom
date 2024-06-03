@@ -1,13 +1,14 @@
 <html>
 <head>
-    <title>upload the file : GFG</title>
+    <title>Главная</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/tg.png') }}" />
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/index.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/errors.css') }}">
 </head>
 <body>
     <div class="header">
         <div class="logo">
-            <img style="width: 200px; height: 50px" src="{{ url_for('static', filename='images/logo.png') }}" alt="">
+            <h1>MessageChecker</h1>
         </div>
         <div class="menu">
             {% for m in menu %}
@@ -59,7 +60,7 @@
     </div>
     <div class="consts">
         {%if param2==None%}
-        <h1 style="font-family: Georgia,serif;" >Выбранный фото:</h1>
+        <h1 style="font-family: Georgia,serif;" >Выбранное фото:</h1>
         {%else%}
         <h1 style="font-family: Georgia,serif;" >Выбранное фото: {{ param2 }}</h1>
         {%endif%}
@@ -71,10 +72,14 @@
         </div>
     </form>
     </div>
-
+    {%if no_m != None%}
+        <div class="consts">
+            <h1>На изображении нет сообщений</h1>
+        </div>
+    {%endif%}
     <div class="footer">
         <div class="footer-logo">
-            <img style="width: 200px; height: 50px" src="{{ url_for('static', filename='images/logo.png') }}" alt="">
+            <h1>MessageChecker</h1>
         </div>
         <div class="links">
             <a href="">

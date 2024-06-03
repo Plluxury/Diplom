@@ -2,10 +2,10 @@ import json
 import os
 import sqlite3
 from datetime import datetime
-
+import re
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
 from flask import Flask, g, render_template, session, request, redirect, url_for, flash, make_response, \
-    send_from_directory
+    send_from_directory, Response
 from flask_paginate import Pagination, get_page_parameter
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
@@ -25,7 +25,7 @@ login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 login_manager.login_message = 'Необходимо авторизоваться'
 login_manager.login_message_category = 'success'
-
+EMAIL_PATTERN = re.compile(r'^[\w\-\\.]+@([\w-]+\.)+[\w-]{2,4}$')
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -60,8 +60,10 @@ def before_request():
 @app.route('/')
 def main():
     user = current_user
+    no_messages = request.args.get('no_m')
+
     return render_template("index.html", menu=dbase.getmenu(),
-                           param1=session.get('messenger'), param2=session.get('image_name'), user=user)
+                           param1=session.get('messenger'), param2=session.get('image_name'), user=user, no_m=no_messages)
 
 
 @app.route('/load_image', methods=['POST'])
@@ -71,7 +73,10 @@ def load_image():
         session['image_name'] = f.filename
         image_path = os.path.join('files', secure_filename(f.filename))
         session['image_path'] = image_path
-        f.save(image_path)
+        try:
+            f.save(image_path)
+        except FileNotFoundError:
+            flash("Вы не выбрали фотографию", "error")
     return redirect(url_for('main'))
 
 
@@ -117,8 +122,15 @@ def run_model():
         date_path = run_inf(session.get('image_path'), session.get('messenger'))
         with open(f"results/{date_path}/{session.get('image_name').split('.')[0]}.json", 'r') as file:
             data = json.load(file)
+            try:
+                if data['info']:
+                    return redirect(url_for('main', no_m=True))
+            except KeyError:
+                pass
             session['data'] = data
         sql_transaction(date_path, session.get('image_path'), session.get('image_name'))
+        session.pop('messenger')
+        session.pop('image_name')
         return render_template('json.html', data=data, menu=dbase.getmenu(), user=user)
     # Применяем фильтр, если указан
     if request.method == 'GET':
@@ -161,7 +173,8 @@ def login():
                     return redirect(request.args.get("next"), code=307)
                 return redirect(url_for("profile"))
             flash("Неверная пара логин/пароль", "error")
-        flash("Нет пользователя", "error")
+        else:
+            flash("Такого пользователя не существует, необходимо зарегистрироваться", "error")
 
     return render_template("login.html", menu=dbase.getmenu(), user=user)
 
@@ -170,6 +183,12 @@ def login():
 def register():
     user = current_user
     if request.method == 'POST':
+        if not EMAIL_PATTERN.search(request.form['email']):
+            flash("Неправильный email", 'error')
+            return redirect(url_for('register'))
+        if len(request.form['psw']) < 8:
+            flash("Пароль должен быть больше восьми символов", 'error')
+            return redirect(url_for('register'))
         if request.form['psw'] == request.form['psw2']:
             hashpsw = generate_password_hash(request.form['psw'])
             res = dbase.adduser(request.form['surname'], request.form['name'], request.form['email'], hashpsw)
@@ -177,9 +196,9 @@ def register():
                 flash("Вы зарегистрированы", 'success')
                 return redirect(url_for('login'))
             else:
-                flash('Ошибка', 'error')
+                flash('Пользователь с таким email уже зарегистрирован', 'error')
         else:
-            flash('Ошибка в полях', 'error')
+            flash('Пароли не совпадают', 'error')
     return render_template('register.html', menu=dbase.getmenu(), user=user)
 
 
@@ -196,14 +215,16 @@ def logout():
 def profile():
     start_date = request.args.get('start')
     end_date = request.args.get('end')
+    detected = request.args.get('detected')
     selected_user = request.args.get('user')
     usages = dbase.getuserusage(current_user.get_id()) if int(current_user.get_role()) == 0 else dbase.getallusage()
-
+    print('1111111111111111111111111111', usages)
     if start_date is None:
         start_date = ''  # Установите значение по умолчанию, если параметр не передан
     if end_date is None:
         end_date = ''  # Установите значение по умолчанию, если параметр не передан
-
+    if detected is None:
+        detected = ''  # Установите значение по умолчанию, если параметр не передан
     if start_date and end_date:
         try:
             start_date_obj = datetime.strptime(start_date, '%Y-%m-%d')
@@ -242,33 +263,88 @@ def profile():
     start = (page - 1) * per_page
     end = start + per_page
     total_pages = (len(usages) + per_page - 1) // per_page
-    sliced_usages = usages[start:end]
-
+    if type(usages) != str:
+        sliced_usages = usages[start:end]
+    else:
+        if int(current_user.get_role()) == 0:
+            return render_template('profile.html', menu=dbase.getmenu(), nouses=usages, total_pages=total_pages,
+                                   page=page, start_date=start_date, end_date=end_date)
+        else:
+            unique_users = dbase.get_unique_users()
+            return render_template('admin_profile.html', menu=dbase.getmenu(), nouses=usages,
+                                   total_pages=total_pages, page=page, start_date=start_date, end_date=end_date,
+                                   unique_users=unique_users, selected_user=selected_user, detected=detected)
     formatted_usages = []
     if int(current_user.get_role()) == 0:
         for i in sliced_usages:
-                formatted_usage = [
-                    i['date_time'],
-                    str(i['image_name'].split('\\')[1]),
-                    str(i['file_name'].split('\\')[2])
-                ]
-                formatted_usages.append(formatted_usage)
+            formatted_usage = [
+                i['date_time'],
+                str(i['image_name'].split('\\')[1]),
+                str(i['file_name'].split('\\')[2])
+            ]
+            formatted_usages.append(formatted_usage)
     else:
         for i in sliced_usages:
-                formatted_usage = [
-                    i['date_time'],
-                    str(i['image_name'].split('\\')[1]),
-                    str(i['file_name'].split('\\')[2]),
-                    str(i['user_name'])
-                ]
-                formatted_usages.append(formatted_usage)
+            formatted_usage = [
+                i['date_time'],
+                str(i['image_name'].split('\\')[1]),
+                str(i['file_name'].split('\\')[2]),
+                str(i['user_name'])
+            ]
+            formatted_usages.append(formatted_usage)
 
     if int(current_user.get_role()) == 0:
-        return render_template('profile.html', menu=dbase.getmenu(), uses=formatted_usages, total_pages=total_pages, page=page, start_date=start_date, end_date=end_date)
+        return render_template('profile.html', menu=dbase.getmenu(), uses=formatted_usages, total_pages=total_pages,
+                               page=page, start_date=start_date, end_date=end_date)
     else:
         unique_users = dbase.get_unique_users()
-        return render_template('admin_profile.html', menu=dbase.getmenu(), uses=formatted_usages, total_pages=total_pages, page=page, start_date=start_date, end_date=end_date, unique_users=unique_users, selected_user=selected_user)
+        return render_template('admin_profile.html', menu=dbase.getmenu(), uses=formatted_usages,
+                               total_pages=total_pages, page=page, start_date=start_date, end_date=end_date,
+                               unique_users=unique_users, selected_user=selected_user, detected=detected)
 
+@app.route('/check_json/', methods=['POST'])
+def check_json():
+    if request.method == 'POST':
+        pass_file = request.files['db']
+        json_file = request.files['img']
+
+        pass_path = os.path.join('chekins', secure_filename(pass_file.filename))
+        pass_file.save(pass_path)
+
+        json_path = os.path.join('chekins', secure_filename(json_file.filename))
+        json_file.save(json_path)
+        detected = []
+        data_time = []
+        data_type = []
+        # Открываем JSON файл для чтения
+        with open(json_path, 'r') as json_file:
+            # Загружаем данные из файла
+            json_data = json.load(json_file)
+            with open(pass_path, 'r', encoding="utf8") as pass_file:
+                # Загружаем данные из файла
+                passwords = json.load(pass_file)
+
+                for message in json_data['messages']:
+                    message_text = message.get("text")  # Получаем текст сообщения
+
+                    if message_text is not None:
+                        # Проверяем, содержится ли текст сообщения в значениях файла с паролями
+                        for i in passwords.values():
+                            if i in message_text.split():
+                                detected.append(i)
+                                if message.get('time') is not None:
+                                    data_time.append(message.get('time'))
+                                data_type.append(message.get('type'))
+
+        detected_message = ""
+        if not detected:
+            detected_message = "Ничего не найдено"
+        elif len(detected) == 1:
+            detected_message = f"Пароль '{detected[0]}' обнаружен в сообщении отправленном в {data_time[0]}, и имеющим тип {data_type[0]}"
+        else:
+            detected_message = f"Пароли {', '.join(detected)} обнаружены в сообщениях отправленных в {', '.join(data_time)}, и имеющих тип {', '.join(data_type)}"
+
+        return redirect(url_for('profile', detected=detected_message))
 
 @app.route('/download_image/<filename>')
 def download_image(filename):
@@ -282,7 +358,6 @@ def download_file(date_time, filename):
     # Путь к каталогу, где находятся файлы для скачивания
     directory = f'results/{date_time}'
     return send_from_directory(directory, filename, as_attachment=True)
-
 
 @app.route('/userava')
 @login_required

@@ -18,7 +18,10 @@
     background-position: center; /* центрирует изображение по горизонтали и вертикали */
 }
 .logo {
+    width: 40%;
     padding: 1%;
+    color: #e1e1e1;
+    font-family: "Lucinda Grande", "Lucinda Sans Unicode", Helvetica, Arial, Verdana, sans-serif;
 }
 
 .menu {
@@ -99,7 +102,11 @@ button[type="submit"]:hover, button[type="button"]:hover {
     height: 120px;
     background-color: #a44fff;
 }
-.footer-logo img{
+.footer-logo{
+    display: flex;
+    text-align: right;
+    color: #e1e1e1;
+    font-family: "Lucinda Grande", "Lucinda Sans Unicode", Helvetica, Arial, Verdana, sans-serif;
     padding: 30px;
 }
 .links img{
