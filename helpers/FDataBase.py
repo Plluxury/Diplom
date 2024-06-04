@@ -138,16 +138,20 @@ class FDataBase:
 
     def getuserusage(self, user_id):
         try:
-            self.__cur.execute(f"SELECT i.image_name, f.file_name, u.date_time FROM uses u "
-                               f"INNER JOIN images i ON u.id_image = i.id_image "
-                               f"INNER JOIN files f ON u.id_file = f.id_file WHERE u.id_user = ?", user_id)
+            self.__cur.execute("""
+                SELECT i.image_name, f.file_name, u.date_time 
+                FROM uses u 
+                INNER JOIN images i ON u.id_image = i.id_image 
+                INNER JOIN files f ON u.id_file = f.id_file 
+                WHERE u.id_user = ?
+            """, (user_id,))
             res = self.__cur.fetchall()
             if not res:
                 res = "Вы еще не использовали модель"
                 return res
             return res
         except sqlite3.Error as e:
-            print("Ошибка file" + str(e))
+            print("Ошибка file " + str(e))
 
         return False
 
@@ -161,11 +165,10 @@ class FDataBase:
 
             if not res:
                 res = "Модель еще не была использована"
-                print(11111111111111111111111, res)
                 return res
             return res
         except sqlite3.Error as e:
-            print("Ошибка file" + str(e))
+            print("Ошибка file " + str(e))
 
         return False
 

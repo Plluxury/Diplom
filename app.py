@@ -257,7 +257,6 @@ def profile():
         # Применяем фильтр по пользователю
     if selected_user:
         usages = [usage for usage in usages if usage['user_name'] == selected_user]
-
     page = request.args.get('page', 1, type=int)
     per_page = 5
     start = (page - 1) * per_page
